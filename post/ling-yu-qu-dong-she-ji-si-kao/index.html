@@ -2,7 +2,7 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>关于 | 诸天域</title>
+<title>领域驱动设计思考 | 诸天域</title>
 <meta name="description" content="温故而知新" />
 <link rel="shortcut icon" href="https://blog.zhuxingzhao.com/favicon.ico?v=1616927491474">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -86,38 +86,48 @@
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              关于
+              领域驱动设计思考
             </h2>
             <div class="post-info">
               <span>
-                2019-01-25
+                2021-03-28
               </span>
               <span>
-                1 min read
+                4 min read
               </span>
               
             </div>
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <h2 id="关于我">关于我</h2>
+                <h3 id="软件设计模式的发展">软件设计模式的发展</h3>
+<p>软件设计模式一直在不断的发展和实践过程中，我们一直不断的总结和思考什么样的软件设计模式适合实际的项目开发。<br>
+从上个世纪以来，从直接特定硬件上构建软件，到操作系统的诞生，我们的软件开发人员从此从繁琐的底层操作抽离出来，从而可以吧中心放到了实际功能的实现，让我们不在关注底层的细节。这正是操作系统所带来的。从而带来的思想是，我们可以通过分层去处理问题。<br>
+<img src="https://blog.zhuxingzhao.com/post-images/1616927448754.jpg" alt="" loading="lazy"><br>
+随之而来的带来带问题是，在不同的操作系统之间，我们的应用软件带来了互相不兼容的问题，我们的一份代码不能在这些不同的操作系统的之间实用，那怎么办呢，我们继续使用上面的思考办法，我们继续对操作系统进行隔离，我们构建一套虚拟机，来运行我们的代码。这就是<code>java</code>，它所宣称的思想就是一次编译，各个平台都能运行。<br>
+所以分层的思想是一个相当重要的思想。当我们将复杂问题都给分层处理之后，随后在应用软件开发中，我们也随之面对着在应用软件开发中所遇到的问题，我们的软件架构也需要在这些问题中进行着设计。那么我们对实际问题对分析之后得出，在实际应用程序之中，我们对数据流转过程的分析，我们得出了一种新的软件设计模式，这就是<code>mvc</code>模式。<br>
+<img src="https://blog.zhuxingzhao.com/post-images/1616927463569.jpg" alt="" loading="lazy"><br>
+在面向用户的应用程序中，对其中的交互过程，抽象成了上图的方式，通过<code>controller</code>来处理逻辑，<code>model</code>来处理数据，<code>view</code>来展示，在<code>web</code>1.0的时代的时候，<code>view</code>层主要在后端处理，而在2.0的时代来临之后，在我们将<code>view</code>过渡到前端之后，后端天然的变成了<code>cm</code>模式了。<br>
+随着时间的前进，我们继续探索者更加符合当代的软件设计模式，我们随之又提出了<code>mvvm</code>的开发方式<br>
+<img src="https://blog.zhuxingzhao.com/post-images/1616927475525.jpg" alt="" loading="lazy"><br>
+通过上述模型有助于将图形用户界面的开发与业务逻辑或后端逻辑（数据模型）的开发分离开来，前后端的人员明确的分工开始了。<br>
+随着当代软件的复杂度和规模不断扩大，我们需要一些更加符合实际的设计模式来帮助我们完成我们的软件设计以达到良好的工程效率以及代码质量。<code>TDD</code>和<code>DDD</code>设计相继被实践出来。在<code>TDD</code>的方法下，我们在<code>红绿</code>重构之间不断完善我们的代码功能和逻辑以达到良好的项目质量。<br>
+<img src="https://blog.zhuxingzhao.com/post-images/1616927489686.jpg" alt="" loading="lazy"><br>
+而<code>DDD</code>更是在面向对象的方法下面，更加高度的提出了一种对整个项目更加有益的设计思想。</p>
+<h3 id="什么是领域驱动设计">什么是领域驱动设计</h3>
+<p>领域驱动设计（Domain Driven Design)，在面对对象的基础上提出了一种更加有效的设计思想，让我们在开发以及项目管理上，能得到更好的优势。<br>
+在一个对开发人员完全陌生的一个领域时，我们需要让开发人员理解这个领域的知识才能更开发出实用的软件系统。不然就是一些不懂领域的人开发出不符合实际的情况的东西，这将造成时间和成本上的浪费。</p>
 <ul>
-<li>🌚一个不务正业的工科假程序员</li>
-<li>⚡️喜欢神奇宝贝 不是死宅</li>
-<li>👀我在浙江工业大学</li>
-<li>😧想旅行没钱</li>
-<li>🐧<s>曾任腾讯IEG蓝鲸做运营开发实习生</s></li>
-<li>🙌 是一个擅长 <s>c++</s> Go Python PHP的 略懂一点前端的菜鸡</li>
-</ul>
-<h2 id="联系我">联系我</h2>
-<ul>
-<li>私人联系请邮箱<a href="zxz@zhuxingzhao.com">zxz@zhuxingzhao.com</a></li>
-<li><a href="https://github.com/zzhutianyu">GitHub</a></li>
-<li>留言请底部留言</li>
-</ul>
-<h2 id="其他东西">其他东西</h2>
-<ul>
-<li>没有了</li>
+<li>bounted context 限界上下文</li>
+<li>core domain 核心领域 common domain 通用领域</li>
+<li>domain event 领域事件</li>
+<li>domain service 领域服务</li>
+<li>聚合根 aggregate root</li>
+<li>value object 值对象 entity 实体</li>
+<li>infrastructure 基础</li>
+<li>module 模块</li>
+<li>factory 工厂</li>
+<li></li>
 </ul>
 
               </div>
@@ -125,9 +135,12 @@
                 <ul class="markdownIt-TOC">
 <li>
 <ul>
-<li><a href="#%E5%85%B3%E4%BA%8E%E6%88%91">关于我</a></li>
-<li><a href="#%E8%81%94%E7%B3%BB%E6%88%91">联系我</a></li>
-<li><a href="#%E5%85%B6%E4%BB%96%E4%B8%9C%E8%A5%BF">其他东西</a></li>
+<li>
+<ul>
+<li><a href="#%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8F%91%E5%B1%95">软件设计模式的发展</a></li>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1">什么是领域驱动设计</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

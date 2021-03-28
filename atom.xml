@@ -2,12 +2,49 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://blog.zhuxingzhao.com</id>
     <title>诸天域</title>
-    <updated>2020-02-07T08:22:42.811Z</updated>
+    <updated>2021-03-28T10:31:53.653Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://blog.zhuxingzhao.com"/>
     <link rel="self" href="https://blog.zhuxingzhao.com/atom.xml"/>
     <subtitle>温故而知新</subtitle>
     <logo>https://blog.zhuxingzhao.com/images/avatar.png</logo>
     <icon>https://blog.zhuxingzhao.com/favicon.ico</icon>
-    <rights>All rights reserved 2020, 诸天域</rights>
+    <rights>All rights reserved 2021, 诸天域</rights>
+    <entry>
+        <title type="html"><![CDATA[领域驱动设计思考]]></title>
+        <id>https://blog.zhuxingzhao.com/post/ling-yu-qu-dong-she-ji-si-kao</id>
+        <link href="https://blog.zhuxingzhao.com/post/ling-yu-qu-dong-she-ji-si-kao">
+        </link>
+        <updated>2021-03-28T10:26:53.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="软件设计模式的发展">软件设计模式的发展</h3>
+<p>软件设计模式一直在不断的发展和实践过程中，我们一直不断的总结和思考什么样的软件设计模式适合实际的项目开发。<br>
+从上个世纪以来，从直接特定硬件上构建软件，到操作系统的诞生，我们的软件开发人员从此从繁琐的底层操作抽离出来，从而可以吧中心放到了实际功能的实现，让我们不在关注底层的细节。这正是操作系统所带来的。从而带来的思想是，我们可以通过分层去处理问题。<br>
+<img src="https://blog.zhuxingzhao.com/post-images/1616927448754.jpg" alt="" loading="lazy"><br>
+随之而来的带来带问题是，在不同的操作系统之间，我们的应用软件带来了互相不兼容的问题，我们的一份代码不能在这些不同的操作系统的之间实用，那怎么办呢，我们继续使用上面的思考办法，我们继续对操作系统进行隔离，我们构建一套虚拟机，来运行我们的代码。这就是<code>java</code>，它所宣称的思想就是一次编译，各个平台都能运行。<br>
+所以分层的思想是一个相当重要的思想。当我们将复杂问题都给分层处理之后，随后在应用软件开发中，我们也随之面对着在应用软件开发中所遇到的问题，我们的软件架构也需要在这些问题中进行着设计。那么我们对实际问题对分析之后得出，在实际应用程序之中，我们对数据流转过程的分析，我们得出了一种新的软件设计模式，这就是<code>mvc</code>模式。<br>
+<img src="https://blog.zhuxingzhao.com/post-images/1616927463569.jpg" alt="" loading="lazy"><br>
+在面向用户的应用程序中，对其中的交互过程，抽象成了上图的方式，通过<code>controller</code>来处理逻辑，<code>model</code>来处理数据，<code>view</code>来展示，在<code>web</code>1.0的时代的时候，<code>view</code>层主要在后端处理，而在2.0的时代来临之后，在我们将<code>view</code>过渡到前端之后，后端天然的变成了<code>cm</code>模式了。<br>
+随着时间的前进，我们继续探索者更加符合当代的软件设计模式，我们随之又提出了<code>mvvm</code>的开发方式<br>
+<img src="https://blog.zhuxingzhao.com/post-images/1616927475525.jpg" alt="" loading="lazy"><br>
+通过上述模型有助于将图形用户界面的开发与业务逻辑或后端逻辑（数据模型）的开发分离开来，前后端的人员明确的分工开始了。<br>
+随着当代软件的复杂度和规模不断扩大，我们需要一些更加符合实际的设计模式来帮助我们完成我们的软件设计以达到良好的工程效率以及代码质量。<code>TDD</code>和<code>DDD</code>设计相继被实践出来。在<code>TDD</code>的方法下，我们在<code>红绿</code>重构之间不断完善我们的代码功能和逻辑以达到良好的项目质量。<br>
+<img src="https://blog.zhuxingzhao.com/post-images/1616927489686.jpg" alt="" loading="lazy"><br>
+而<code>DDD</code>更是在面向对象的方法下面，更加高度的提出了一种对整个项目更加有益的设计思想。</p>
+<h3 id="什么是领域驱动设计">什么是领域驱动设计</h3>
+<p>领域驱动设计（Domain Driven Design)，在面对对象的基础上提出了一种更加有效的设计思想，让我们在开发以及项目管理上，能得到更好的优势。<br>
+在一个对开发人员完全陌生的一个领域时，我们需要让开发人员理解这个领域的知识才能更开发出实用的软件系统。不然就是一些不懂领域的人开发出不符合实际的情况的东西，这将造成时间和成本上的浪费。</p>
+<ul>
+<li>bounted context 限界上下文</li>
+<li>core domain 核心领域 common domain 通用领域</li>
+<li>domain event 领域事件</li>
+<li>domain service 领域服务</li>
+<li>聚合根 aggregate root</li>
+<li>value object 值对象 entity 实体</li>
+<li>infrastructure 基础</li>
+<li>module 模块</li>
+<li>factory 工厂</li>
+<li></li>
+</ul>
+]]></content>
+    </entry>
 </feed>
