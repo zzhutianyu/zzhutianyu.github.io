@@ -1,284 +1,106 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://blog.zhuxingzhao.com</id>
-    <title>诸天域</title>
-    <updated>2021-06-13T16:07:42.213Z</updated>
-    <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://blog.zhuxingzhao.com"/>
-    <link rel="self" href="https://blog.zhuxingzhao.com/atom.xml"/>
-    <subtitle>温故而知新</subtitle>
-    <logo>https://blog.zhuxingzhao.com/images/avatar.png</logo>
-    <icon>https://blog.zhuxingzhao.com/favicon.ico</icon>
-    <rights>All rights reserved 2021, 诸天域</rights>
-    <entry>
-        <title type="html"><![CDATA[大中型游戏运维思考]]></title>
-        <id>https://blog.zhuxingzhao.com/post/da-zhong-xing-you-xi-yun-wei-si-kao/</id>
-        <link href="https://blog.zhuxingzhao.com/post/da-zhong-xing-you-xi-yun-wei-si-kao/">
-        </link>
-        <updated>2021-06-12T14:03:29.000Z</updated>
-        <content type="html"><![CDATA[<blockquote>
-<p>笔者从20年开始参与某大中型手游运维工作，以及在组内其他游戏运维经验的见解<br>
-粗略描写，后续补充</p>
-</blockquote>
-<h2 id="叙述">叙述</h2>
-<h2 id="游戏运维面对的挑战">游戏运维面对的挑战</h2>
-<h3 id="架构复杂多样化">架构复杂多样化</h3>
-<p>游戏架构大多架构复杂，为了应对海量的用户，架构上都是高度集群以及分布式</p>
-<h3 id="模块数量多">模块数量多</h3>
-<p>随着游戏生命周期的不断延续，其运营的过程中，会随着运营的发展不断增加模块来支持不同的玩法和活动，我所接触的某fps手游就多达100以上的游戏进程模块。</p>
-<h3 id="发布频繁">发布频繁</h3>
-<p>游戏运营过程中，必然随着运营所带来的各种活动和策划的玩法修改，必然会有不断的频繁的发布。这就要求运维必须有能力支持这种频繁的发布，特别是面对复杂游戏业务的时候。</p>
-<h3 id="有状态过多">有状态过多</h3>
-<p>游戏一般为了保障用户体验，大部门的游戏模块都是有状态设计，这就导致了不能像web应用可以使用大规模无状态应用的发布方式。对于有状态的应用的发布，必然慎之又慎，避免用户数据丢失导致的用户体验和用户投诉。</p>
-<h3 id="不停机发布的挑战">不停机发布的挑战</h3>
-<p>为了保障用户的良好体验，越来越多的游戏都开始建设了不停服发布的发布流程，就是为了保证玩家体验不中断。但是不停服就给游戏架构和运维带来了挑战，如何建设一个稳定的不停服发布流程是需要运维和开发需要不断沟通设计的。</p>
-<h2 id="准备阶段">准备阶段</h2>
-<p>本章阐述游戏的基础准备内容，运维人员应该在游戏正式发布之前建设好以下内容，在随着游戏运营的不断发展进行调整。</p>
-<h3 id="机器资源容量评估">机器资源容量评估</h3>
-<p>机器资源容量评估是一个非常重要的准备工作，我们对于容量评估必须保证合理以及冗余。</p>
-<ul>
-<li>模块数量</li>
-<li>单模块承载容量</li>
-<li>机器非游戏进程的以外其他进程的消耗</li>
-<li>适量的冗余</li>
-<li>我们必然保证模块从前往后应该逐渐冗余，上游模块压垮下游模块</li>
-</ul>
-<p>容量评估完成，必须沉淀为标准公式即</p>
-<p>当前预计容量 / 单模块单机（需要明确机型）容量 = 机器数量</p>
-<p>完成标准公式是为之后的标准化流程建设准备</p>
-<h3 id="cdn容量评估">CDN容量评估</h3>
-<p>CDN是游戏成本的大头，我们需要考虑每次发布所需要的CDN容量，来进行必要的容量准备，以及可以的成本优化。常见的成本优化方法</p>
-<ul>
-<li>预下载</li>
-<li>边缘CDN</li>
-<li>P2P下载</li>
-</ul>
-<h3 id="成本核算">成本核算</h3>
-<p>运维需要对游戏消耗成本的高度敏感，我们需要了解游戏成本方方面面，明确占比，在必要的时候，需要进行成本优化，将不必要的成本优化掉，减少必要的浪费。</p>
-<ul>
-<li>CDN</li>
-<li>机器成本</li>
-<li>储存成本</li>
-<li>营销机器成本</li>
-</ul>
-<h3 id="机器初始化准备">机器初始化准备</h3>
-<p>我们需要梳理机器所必要的一些初始化的准备</p>
-<ul>
-<li>网络内核参数调优</li>
-<li>运营目录结构</li>
-<li>crontab定时作业</li>
-<li>必要的非游戏进程（监控，管控，数据上报）</li>
-</ul>
-<h3 id="模块划分">模块划分</h3>
-<p>我们需要按模块合理划分游戏进程，这一步一般需要和开发进行沟通考虑。运维侧最好有相关的元数据管理系统，沉淀模块信息。</p>
-<h2 id="统一的基础设施建设">统一的基础设施建设</h2>
-<p>一个统一的基础设施是非常有必要的，避免人员迭代以及不规范的一些操作导致线上环境不断发散腐烂。</p>
-<h3 id="基于虚拟机或物理机器到运维基础设施建设">基于虚拟机或物理机器到运维基础设施建设</h3>
-<h4 id="统一的机器镜像">统一的机器镜像</h4>
-<p>我们最好事先准备一个统一的机器镜像，里面安装了必要的软件和去除不必要的东西。</p>
-<h4 id="统一的脚本">统一的脚本</h4>
-<p>我所见到很多老运维对于脚本管理简直是混乱不堪，线上存在许许多多的脚本，而不明确每个脚本的作用。我们必须建设统一的cli工具作为统一运维console工具的入口。虽然shell是运维的强大工具。在这里我推荐的是go来构建统一的cli工具。</p>
-<ul>
-<li>go直接打包成可执行二进制，不分散文件</li>
-<li>静态语言的特性保证了工具的质量</li>
-<li>不需要关心机器的运行环境</li>
-</ul>
-<p>统一的cli工具的优势</p>
-<ul>
-<li>唯一的操作入口</li>
-<li>沉淀工具脚本</li>
-<li>各个环境版本一致</li>
-</ul>
-<h4 id="统一的配置">统一的配置</h4>
-<p>上面我们说了建设统一cli工具，那我们的环境配置也需要统一的配置，通过统一的环境配置，我们可以在不同的环境通过不同的环境配置就可以达到不同环境一个脚本一个操作，而不必不同环境单独书写不同的脚本。操作统一，避免事故。推荐yaml形式作为配置。</p>
-<h4 id="版本化的管理">版本化的管理</h4>
-<p>我们以上的统一的建设，都必须要做到一个要求，就是版本化的管理。我们可以使用版本管理软件将以上建设纳管。 我们就可以建设一套基础设施管理的流程。我们可以通过软件开发的方法保证我们的基础设施的质量。 我们遵循gitflow或者github flow的方式，来对我们的基础设施进行发布管理 然后通过CD工具自动发布到全部的机器，保证全部环境的统一。</p>
-<h3 id="基于容器的基础设施建设">基于容器的基础设施建设</h3>
-<p>随着业务上云的趋势。我们也在探索容器在游戏领域的探索。</p>
-<h4 id="k8s集群的基础设施">k8s集群的基础设施</h4>
-<p>首当其冲就是k8s集群的管理，这里建议的是最好是托管到各个云平台的容器服务，自建k8s集群需要投入必要的容器运维人员。</p>
-<h4 id="helm配置管理">helm配置管理</h4>
-<p>容器的配置管理自然是helm，我们需要根据游戏架构的设计，进行对应template的文件编写。</p>
-<h2 id="流程管理">流程管理</h2>
-<p>流程是一个游戏运营生命周期非常重要的一环，最好是有一个流程编排系统，并且打通相关的系统。方便我们进行流程的编排和自动化。 我们的要求是 - 不需要人的地方，由工具操作 - 需要人的地方，工具辅助人操作</p>
-<h3 id="虚拟机或物理机">虚拟机或物理机</h3>
-<h4 id="发布流程">发布流程</h4>
-<p>一个完整的发布流程一般有以下部分</p>
-<ul>
-<li>当前版本容量评估阶段</li>
-<li>机器准备阶段</li>
-<li>机器初始化阶段</li>
-<li>产物发布</li>
-<li>进程发布</li>
-<li>检查</li>
-<li>发布完成</li>
-</ul>
-<h4 id="不停服发布">不停服发布</h4>
-<p>不停服发布需要游戏架构支持，一般的不停服发布主要有以下方式</p>
-<ul>
-<li>
-<p>两个版本两批机器</p>
-<ul>
-<li>发布不影响上一版本</li>
-<li>需要版本发布期间需要两部容量的机器</li>
-</ul>
-</li>
-<li>
-<p>机器分批发布</p>
-<ul>
-<li>模块需要数量需要为2n以上，避免分批发布过程中，出现单点</li>
-<li>需要架构支持玩家下线不在路由导向另一批机器</li>
-<li>存在一定的用户体验影响，强制引导另外一批机器入口</li>
-</ul>
-</li>
-</ul>
-<h4 id="停机发布">停机发布</h4>
-<p>停机发布只要遵循正常发布流程即可，需要运营侧发布正常的停机公告。</p>
-<h4 id="容量调整">容量调整</h4>
-<p>在游戏运营过程中，我们不可避免，某次活动导致玩家人数上升，需要扩容机器，某段时间玩家人数下降，导致缩容机器。</p>
-<h4 id="扩容流程缩容流程">扩容流程&amp;缩容流程</h4>
-<p>游戏进程一般分局内局外进程。所以正常的两块的机器是不一样的。</p>
-<ul>
-<li>
-<p>扩容流程</p>
-<ul>
-<li>机器准备</li>
-<li>分发对应游戏版本产物</li>
-<li>启动进程</li>
-<li>检查</li>
-<li>扩容完成</li>
-</ul>
-</li>
-<li>
-<p>缩容</p>
-<ul>
-<li>等待玩家下线（需要进程支持配置模块不接受新玩家）</li>
-<li>停止进程</li>
-<li>检查</li>
-<li>机器下线</li>
-</ul>
-</li>
-</ul>
-<h4 id="故障替换流程">故障替换流程</h4>
-<ul>
-<li>替换流程
-<ul>
-<li>新机器准备</li>
-<li>分发对应游戏版本产物到新机器</li>
-<li>启动进程</li>
-<li>检查</li>
-<li>切换</li>
-<li>替换完成</li>
-<li>下线故障机器</li>
-</ul>
-</li>
-</ul>
-<h2 id="可观测性建设">可观测性建设</h2>
-<p>在游戏运营过程中，我们必须建设好业务的可观察性，避免故障发生，没有及时的发现，以及方便的排除各种问题。</p>
-<h3 id="必要关键链路">必要关键链路</h3>
-<ul>
-<li>登录</li>
-<li>注册</li>
-<li>在线</li>
-<li>付费</li>
-<li>对局</li>
-</ul>
-<h3 id="指标">指标</h3>
-<h4 id="业务指标">业务指标</h4>
-<ul>
-<li>在线指标</li>
-<li>登录指标</li>
-<li>注册指标</li>
-<li>付费指标</li>
-</ul>
-<h4 id="机器指标">机器指标</h4>
-<ul>
-<li>cpu</li>
-<li>内存</li>
-<li>磁盘</li>
-<li>网络</li>
-</ul>
-<h3 id="日志">日志</h3>
-<p>需要建设必要的分布式日志系统，以及统一的日志规范。 可以基于ELK开源方案构建日志系统。 或者云厂商的日志方案</p>
-<h3 id="分布式跟踪">分布式跟踪</h3>
-<p>游戏模块后台链路复杂，最好游戏支持从客户端开始的分布式跟踪协议,这里建议的是opentelemetry ，最好支持染色机制，排查特定的链路问题。</p>
-<h3 id="告警建设">告警建设</h3>
-<p>建设好可观测相关的内容之后，我们就可以建设稳定的监控策略</p>
-<ul>
-<li>各种环境的策略</li>
-<li>策略的干系人</li>
-<li>策略的阈值</li>
-<li>策略的对象 随着建设的不断完善，我们也可以建设智能监控相关的能力。</li>
-</ul>
-<h2 id="运维需要的相关工具">运维需要的相关工具</h2>
-<ul>
-<li>CMDB平台</li>
-<li>作业系统</li>
-<li>文件分发系统</li>
-<li>版本管理系统</li>
-<li>流程编排</li>
-<li>可观察性平台</li>
-<li>文档系统</li>
-</ul>
-<h2 id="游戏数据分析">游戏数据分析</h2>
-<p>我们需要建设游戏领域的数据场景模型</p>
-<ul>
-<li>在线场景</li>
-<li>登录场景</li>
-<li>注册场景</li>
-<li>付费场景</li>
-<li>网络场景</li>
-<li>客户端路径</li>
-<li>服务端路径</li>
-<li>游戏地图分析</li>
-<li>客户端设备分析</li>
-</ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[领域驱动设计思考]]></title>
-        <id>https://blog.zhuxingzhao.com/post/ling-yu-qu-dong-she-ji-si-kao/</id>
-        <link href="https://blog.zhuxingzhao.com/post/ling-yu-qu-dong-she-ji-si-kao/">
-        </link>
-        <updated>2021-03-28T10:26:53.000Z</updated>
-        <content type="html"><![CDATA[<h3 id="软件设计模式的发展">软件设计模式的发展</h3>
-<p>软件设计模式一直在不断的发展和实践过程中，我们一直不断的总结和思考什么样的软件设计模式适合实际的项目开发。<br>
-从上个世纪以来，从直接特定硬件上构建软件，到操作系统的诞生，我们的软件开发人员从此从繁琐的底层操作抽离出来，从而可以吧中心放到了实际功能的实现，让我们不在关注底层的细节。这正是操作系统所带来的。从而带来的思想是，我们可以通过分层去处理问题。<br>
-<img src="https://blog.zhuxingzhao.com/post-images/1616927448754.jpg" alt="" loading="lazy"><br>
-随之而来的带来带问题是，在不同的操作系统之间，我们的应用软件带来了互相不兼容的问题，我们的一份代码不能在这些不同的操作系统的之间实用，那怎么办呢，我们继续使用上面的思考办法，我们继续对操作系统进行隔离，我们构建一套虚拟机，来运行我们的代码。这就是<code>java</code>，它所宣称的思想就是一次编译，各个平台都能运行。<br>
-所以分层的思想是一个相当重要的思想。当我们将复杂问题都给分层处理之后，随后在应用软件开发中，我们也随之面对着在应用软件开发中所遇到的问题，我们的软件架构也需要在这些问题中进行着设计。那么我们对实际问题对分析之后得出，在实际应用程序之中，我们对数据流转过程的分析，我们得出了一种新的软件设计模式，这就是<code>mvc</code>模式。<br>
-<img src="https://blog.zhuxingzhao.com/post-images/1616927463569.jpg" alt="" loading="lazy"><br>
-在面向用户的应用程序中，对其中的交互过程，抽象成了上图的方式，通过<code>controller</code>来处理逻辑，<code>model</code>来处理数据，<code>view</code>来展示，在<code>web</code>1.0的时代的时候，<code>view</code>层主要在后端处理，而在2.0的时代来临之后，在我们将<code>view</code>过渡到前端之后，后端天然的变成了<code>cm</code>模式了。<br>
-随着时间的前进，我们继续探索者更加符合当代的软件设计模式，我们随之又提出了<code>mvvm</code>的开发方式<br>
-<img src="https://blog.zhuxingzhao.com/post-images/1616927475525.jpg" alt="" loading="lazy"><br>
-通过上述模型有助于将图形用户界面的开发与业务逻辑或后端逻辑（数据模型）的开发分离开来，前后端的人员明确的分工开始了。<br>
-随着当代软件的复杂度和规模不断扩大，我们需要一些更加符合实际的设计模式来帮助我们完成我们的软件设计以达到良好的工程效率以及代码质量。<code>TDD</code>和<code>DDD</code>设计相继被实践出来。在<code>TDD</code>的方法下，我们在<code>红绿</code>重构之间不断完善我们的代码功能和逻辑以达到良好的项目质量。<br>
-<img src="https://blog.zhuxingzhao.com/post-images/1616927489686.jpg" alt="" loading="lazy"><br>
-而<code>DDD</code>更是在面向对象的方法下面，更加高度的提出了一种对整个项目更加有益的设计思想。</p>
-<h3 id="什么是领域驱动设计">什么是领域驱动设计</h3>
-<p>领域驱动设计（Domain Driven Design)，在面对对象的基础上提出了一种更加有效的设计思想，让我们在开发以及项目管理上，能得到更好的优势。<br>
-在一个对开发人员完全陌生的一个领域时，我们需要让开发人员理解这个领域的知识才能更开发出实用的软件系统。不然就是一些不懂领域的人开发出不符合实际的情况的东西，这将造成时间和成本上的浪费。</p>
-<ul>
-<li>bounted context 限界上下文</li>
-<li>core domain 核心领域 common domain 通用领域</li>
-<li>domain event 领域事件</li>
-<li>domain service 领域服务</li>
-<li>聚合根 aggregate root</li>
-<li>value object 值对象 entity 实体</li>
-<li>infrastructure 基础</li>
-<li>module 模块</li>
-<li>factory 工厂</li>
-<li></li>
-</ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Docker 网络]]></title>
-        <id>https://blog.zhuxingzhao.com/post/docker-wang-luo/</id>
-        <link href="https://blog.zhuxingzhao.com/post/docker-wang-luo/">
-        </link>
-        <updated>2019-04-13T15:59:51.000Z</updated>
-        <content type="html"><![CDATA[<h4 id="docker网络概述">Docker网络概述</h4>
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Docker 网络 | 诸天域</title>
+<meta name="description" content="温故而知新" />
+<link rel="shortcut icon" href="https://blog.zhuxingzhao.com/favicon.ico?v=1623600433212">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://blog.zhuxingzhao.com/styles/main.css">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-155197719-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-155197719-1');
+</script>
+
+
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://blog.zhuxingzhao.com">
+  <img class="avatar" src="https://blog.zhuxingzhao.com/images/avatar.png?v=1623600433212" alt="">
+  </a>
+  <h1 class="site-title">
+    诸天域
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/zzhutianyu" target="_blank">
+          <i class="fab fa-github"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              Docker 网络
+            </h2>
+            <div class="post-info">
+              <span>
+                2019-04-13
+              </span>
+              <span>
+                15 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h4 id="docker网络概述">Docker网络概述</h4>
 <p>Docker 作为当下主流容器技术，其网络通信是其中比较重要的一环，Docker实际使用中会遇到如下的情况</p>
 <ul>
 <li>
@@ -611,6 +433,122 @@ networks:
 <blockquote>
 <p>docker 源码解析</p>
 </blockquote>
-]]></content>
-    </entry>
-</feed>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#docker%E7%BD%91%E7%BB%9C%E6%A6%82%E8%BF%B0">Docker网络概述</a></li>
+</ul>
+</li>
+<li><a href="#docker%E5%8D%95%E6%9C%BA%E7%BD%91%E7%BB%9C">Docker单机网络</a>
+<ul>
+<li><a href="#bridge%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F">Bridge网络模式</a></li>
+<li><a href="#host%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F">host网络模式</a></li>
+<li><a href="#other-container%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F">other-container网络模式</a></li>
+<li><a href="#none%E6%A8%A1%E5%BC%8F">none模式</a></li>
+<li><a href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A8%A1%E5%BC%8F">自定义模式</a>
+<ul>
+<li><a href="#%E5%AE%B9%E5%99%A8%E9%97%B4%E9%80%9A%E4%BF%A1">容器间通信</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '7b0cb864ab56a8a46e72',
+    clientSecret: '5f32a3e758210c58d489ad60b1f159d1c8bf5783',
+    repo: 'zzhutianyu.github.io',
+    owner: 'zzhutianyu',
+    admin: ['zzhutianyu'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+</br>
+Copyright ©　诸天域 | 
+  <a class="rss" href="https://blog.zhuxingzhao.com/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+
+  let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+  // This should probably be throttled.
+  // Especially because it triggers during smooth scrolling.
+  // https://lodash.com/docs/4.17.10#throttle
+  // You could do like...
+  // window.addEventListener("scroll", () => {
+  //    _.throttle(doThatStuff, 100);
+  // });
+  // Only not doing it here to keep this Pen dependency-free.
+
+  window.addEventListener("scroll", event => {
+    let fromTop = window.scrollY;
+
+    mainNavLinks.forEach((link, index) => {
+      let section = document.getElementById(decodeURI(link.hash).substring(1));
+      let nextSection = null
+      if (mainNavLinks[index + 1]) {
+        nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+      }
+      if (section.offsetTop <= fromTop) {
+        if (nextSection) {
+          if (nextSection.offsetTop > fromTop) {
+            link.classList.add("current");
+          } else {
+            link.classList.remove("current");    
+          }
+        } else {
+          link.classList.add("current");
+        }
+      } else {
+        link.classList.remove("current");
+      }
+    });
+  });
+
+</script>
+
+      </div>
+    </div>
+  </body>
+</html>
