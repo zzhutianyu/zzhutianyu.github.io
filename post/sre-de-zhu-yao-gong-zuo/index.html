@@ -1,0 +1,538 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title> SRE的主要工作 | 诸天域</title>
+<meta name="description" content="温故而知新" />
+<link rel="shortcut icon" href="https://blog.zhuxingzhao.com/favicon.ico?v=1653216446636">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://blog.zhuxingzhao.com/styles/main.css">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-155197719-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-155197719-1');
+</script>
+
+
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://blog.zhuxingzhao.com">
+  <img class="avatar" src="https://blog.zhuxingzhao.com/images/avatar.png?v=1653216446636" alt="">
+  </a>
+  <h1 class="site-title">
+    诸天域
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/zzhutianyu" target="_blank">
+          <i class="fab fa-github"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+               SRE的主要工作
+            </h2>
+            <div class="post-info">
+              <span>
+                2022-05-22
+              </span>
+              <span>
+                14 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h2 id="主体">主体</h2>
+<h3 id="制定slis-slos-slas">制定SLIs、SLOs、SLAs</h3>
+<p>SRE最好从整个软件研发周期的最开始去联合相关的干系人去制定相关的SLI，在未来软件进入生产之后，更好的提供一份比较科学严谨的SLO以及SLA，以及避免在可能在欠缺SLI的情况下导致我们不得不为相关的指标增加开放工作，而且SRE应该为研发团队宣导相关SLI的历练，让研发在实现功能的同时考虑功能相关的SLI数据的埋点上报。这需要我们跟研发团队保持良好的沟通和宣导。</p>
+<h4 id="概念">概念</h4>
+<ul>
+<li>
+<p>SLIs<br>
+服务水平指标<br>
+表示对服务能够稳定运行而定义的一些指标</p>
+</li>
+<li>
+<p>SLOs<br>
+服务协议目标<br>
+基于SLI达到的能够稳定运行的目标或者范围</p>
+</li>
+<li>
+<p>SLAs<br>
+服务水平协议<br>
+是跟用户或者客户承诺的服务的可靠情况 是一种协议 当达不到承诺的情况下应该做的事情</p>
+</li>
+</ul>
+<h4 id="三者的关系">三者的关系</h4>
+<figure data-type="image" tabindex="1"><img src="https://blog.zhuxingzhao.com/post-images/1653216368716.png" alt="" loading="lazy"></figure>
+<h4 id="干系人">干系人</h4>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>干系人</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SLIs</td>
+<td>SRE、产品</td>
+</tr>
+<tr>
+<td>SLOs</td>
+<td>SRE、产品</td>
+</tr>
+<tr>
+<td>SLAs</td>
+<td>销售、消费者</td>
+</tr>
+</tbody>
+</table>
+<h3 id="可靠性-性能和弹性-饱和度-可观测性">可靠性、性能和弹性、饱和度、可观测性</h3>
+<h4 id="可靠性">可靠性</h4>
+<h5 id="服务时间">服务时间</h5>
+<table>
+<thead>
+<tr>
+<th>可用率%</th>
+<th>每年宕机时间</th>
+<th>每月宕机时间(30天计算)</th>
+<th>每周宕机时间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>90%</td>
+<td>36.5 days</td>
+<td>72 hours</td>
+<td>16.8 hours</td>
+</tr>
+<tr>
+<td>95%</td>
+<td>18.25 days</td>
+<td>36 hours</td>
+<td>8.4 hours</td>
+</tr>
+<tr>
+<td>98%</td>
+<td>7.30 days</td>
+<td>14.4 hours</td>
+<td>3.36 hours</td>
+</tr>
+<tr>
+<td>99%</td>
+<td>3.65 days</td>
+<td>7.20 hours</td>
+<td>1.68 hours</td>
+</tr>
+<tr>
+<td>99.5%</td>
+<td>1.83 days</td>
+<td>3.60 hours</td>
+<td>50.4 minutes</td>
+</tr>
+<tr>
+<td>99.8%</td>
+<td>17.52 hours</td>
+<td>86.23 minutes</td>
+<td>20.16 minutes</td>
+</tr>
+<tr>
+<td>99.9%</td>
+<td>8.76 hours</td>
+<td>43.2 minutes</td>
+<td>10.1 minutes</td>
+</tr>
+<tr>
+<td>99.95%</td>
+<td>4.38 hours</td>
+<td>21.56 minutes</td>
+<td>5.04 minutes</td>
+</tr>
+<tr>
+<td>99.99%</td>
+<td>52.6 minutes</td>
+<td>4.32 minutes</td>
+<td>1.01 minutes</td>
+</tr>
+<tr>
+<td>99.999%</td>
+<td>5.26 minutes</td>
+<td>25.9 seconds</td>
+<td>6.05 seconds</td>
+</tr>
+<tr>
+<td>99.9999%</td>
+<td>31.5 seconds</td>
+<td>2.59 seconds</td>
+<td>0.605 seconds</td>
+</tr>
+</tbody>
+</table>
+<h5 id="mttr">MTTR</h5>
+<p>MTTR 是设备从任何故障中恢复所需的平均时间。</p>
+<h5 id="mtbf">MTBF</h5>
+<p>MTBF 是在正常系统运行期间，机械或电子系统固有故障之间的预计经过时间。MTBF 可以计算为系统故障之间的算术平均（平均）时间。该术语用于可修复系统，而平均故障时间 (MTTF) 表示不可修复系统的预期故障时间。</p>
+<h5 id="mttf">MTTF</h5>
+<p>MTTF 表示不可修复系统的预期故障时间。</p>
+<h4 id="性能和弹性">性能和弹性</h4>
+<p>性能和弹性是两个冲突的点。如果我们一味的追求性能，必然导致我们的应用不是太弹性。如果太弹性也就意味着我们的应用性能不是那么强。<br>
+这两者的取舍应该取绝于，我们的单体QPS以及用户的对于延迟的容忍度。</p>
+<h4 id="饱和度">饱和度</h4>
+<p>这个定义一般是定义我们的SLO，他可以是当前服务承载的容量，也可以是CPU使用率。饱和度最大值应该是我们服务不可用的时候的所表现的测量点。</p>
+<h4 id="可观测性">可观测性</h4>
+<p>我们系统的可观测性信号由以下四点</p>
+<ul>
+<li>指标</li>
+<li>跟踪</li>
+<li>日志</li>
+<li>proile</li>
+<li>crash</li>
+</ul>
+<p>这几个信号会帮助我们显著了解我们系统的稳定性，并能很好的帮助我们在故障的情况下，快速发现并且快速排障。<br>
+而且这几个信号我们也应该进行数据标准的统一让几者可以关联起来，更好的帮助观察和故障排查。这也是现代可观测性建设的核心目标之一。<br>
+我们应该建设一个具备相关信号的可观测性平台以及推动研发进行相关的可观测性信号能力的接入以及开发。<br>
+最好联合相关团队进行宣导，以及最好有在迭代中有10%的人力投入能够做到相关的支持。</p>
+<h5 id="指标">指标</h5>
+<p>指标是一个很重要的概念，我们常常忽视他的存在。指标的定义，与监控系统所支持的数据模型结构，有着非常密切的关系。监控数据的来源，从数据的类型可以分为：数值，短文本字符串，日志(长文本字符串)。通常所讲的指标，都是对当前系统环境具有度量价值的统计数据，使我们能够明确知道当前系统环境的运行状态。<br>
+指标的定义应该遵循SMART原则:</p>
+<ul>
+<li>S代表具体(Specific)  指标是明确的，有具体的含义，能反映具体的属性，有针对性的。</li>
+<li>M代表可衡量(Measurable) 可测量指标的活动，包括百分比、数值等。</li>
+<li>A代表可实现(Assignable) 能够将指标的值获取到，有技术手段或工具采集到。</li>
+<li>R代表相关性(Realistic)  与其他指标在逻辑上存在一定关联性。</li>
+<li>T代表有时限(Time-bound) 在一定的时间范围内取值跟踪。</li>
+</ul>
+<h5 id="指标数据模型openmetric">指标数据模型(OpenMetric)</h5>
+<pre><code>metric_name{&lt;label name&gt;=&lt;label value&gt;, ...} value timestamp
+
+node_disk_read_bytes_total{device=&quot;sr0&quot;} 4.3454464e+07
+node_vmstat_pswpout 0
+http_request_total{status=&quot;404&quot;, method=&quot;POST&quot;, route=&quot;/user&quot;} 94334
+</code></pre>
+<h5 id="指标类型">指标类型</h5>
+<ul>
+<li>Counter<br>
+计数器是一种累计型的metric度量指标，它是一个只能递增的数值。计数器主要用于统计类似于服务请求数、任务完成数和错误出现次数这样的数据。</li>
+<li>Gauge<br>
+计量器表示一个既可以增加, 又可以减少的度量指标值。计量器主要用于测量类似于温度、内存使用量这样的瞬时数据。</li>
+<li>Histogram<br>
+直方图对观察结果（通常是请求持续时间或者响应大小这样的数据）进行采样，并在可配置的桶中对其进行统计。</li>
+<li>Summary<br>
+类似于直方图，汇总也对观察结果进行采样。除了可以统计采样值总和和总数，它还能够按分位数统计。</li>
+</ul>
+<h5 id="跟踪trace">跟踪（Trace)</h5>
+<p>跟踪对于当下复杂的的分布式应用来说是非常必要的。它们可能分布在上千个服务器、不同的数据中心和可用区中，如何监控服务之间的依赖关系和调用链，以判断应用在哪个服务环节出了问题，哪些地方可以优化？<br>
+当前最佳的分布式Trace协议选择应该是Opentelemetry</p>
+<pre><code>Causal relationships between Spans in a single Trace
+
+        [Span A]  ←←←(the root span)
+            |
+     +------+------+
+     |             |
+ [Span B]      [Span C] ←←←(Span C is a `child` of Span A)
+     |             |
+ [Span D]      +---+-------+
+               |           |
+           [Span E]    [Span F]
+</code></pre>
+<pre><code>Temporal relationships between Spans in a single Trace
+
+––|–––––––|–––––––|–––––––|–––––––|–––––––|–––––––|–––––––|–&gt; time
+
+ [Span A···················································]
+   [Span B··········································]
+      [Span D······································]
+    [Span C····················································]
+         [Span E·······]        [Span F··]
+</code></pre>
+<h5 id="日志log">日志（Log)</h5>
+<p>日志也是我们观察系统的一个重要信号，担心当今软件形势的发展，让我们的日志收集和存储受到了巨大的挑战。当我们的应用越来越多的从主机往k8s这种架构转型的时候，我们的日志采集受到了比较大的挑战，而且服务产生的日志也越来越多的，对于海量的日志的检索，我们需要探寻更多的方案。</p>
+<h5 id="profile">Profile</h5>
+<p>对于当下云原生的技术的发展，如何对云原生架构下的应用进行profile，也是我们的一个重要挑战，所幸的是由于bpf技术的相关发展，我们可以更好的利用底层技术，去快速的利用bfp相关的技术进行应用的profile从而帮助应用更好的调优。</p>
+<h5 id="crash">Crash</h5>
+<p>crash是我们线上环境出现问题之后的重要现场，我们理应建设好相关的crash分析流程，来更好的跟相关信号进行打通关联，从而跟好的做到自动化的问题发现，报告生成。</p>
+<h3 id="错误预算">错误预算</h3>
+<p>我们可以简单的用 <code>SLO目标 + 错误预算 = 100%</code> 来简单的计算出我们的错误预算。我们的一些日常工作例如版本迭代、变更、故障处理都算在错误预算里面，也就是只要会影响SLO的操作，都应该属于我们错误预算的一部分。如果我们超出了错误预算，也就意味着我们的SLA会收到用户质疑，也就意味着我们应该开始排查为啥错误预算的消耗过高，也就是我们应该给错误预算一个阈值范围，在一定范围的功能发布，变更操作都属于正常的，一旦超过某个值，也就意味着我们的系统可能出现了不稳定的情况，这个时候我们应该马上进行总结，寻找问题的原因，快速解决它。我们应该同真个团队寻找到一个合理的平衡点。</p>
+<h3 id="事务工作预算">事务工作预算</h3>
+<p>作为SRE，我们应该对工作有个要求:</p>
+<ul>
+<li>不需要人的地方由机器完成</li>
+<li>需要的人的地方由机器辅助完成。<br>
+所以需要人操作的地方一般属于我们的事务工作，但是我们也不需要将全部的时间投入到事务工作上，比如变更需要手工执行命令，手动的通知开放。这个时候我们应该理一理我们的时间投入情况，如果事务性的工作太多，是不是我们没有梳理好整个发布流程，变更流程。我们没有沉淀出相关的自动化流程。所以一旦发现我们的事务性工作占据太多的时间，一定要停下来梳理，哪些可以自动化的，哪些可以半自动化的。争取将人工参与的部分降到一个合理的地步。</li>
+</ul>
+<h3 id="风险识别和管理">风险识别和管理</h3>
+<p>风险识别与管理，我在大学的时候学的是安全工程，这是一门专门学习如何进行风险识别与管理的学科，但是那都是对于现实层面的风险识别识别与管理，例如机械、工业、化学、交通等领域的，但都有着类似的方法论。<br>
+说到风险，我们就要认识一下海恩法则</p>
+<blockquote>
+<p>海恩法则是德国飞机涡轮机的发明者德国人帕布斯·海恩提出一个在航空界关于飞行安全的法则,海恩法则指出: 每一起严重事故的背后，必然有29次轻微事故和300起未遂先兆以及1000起事故隐患。法则强调两点：一是事故的发生是量的积累的结果；二是再好的技术，再完美的规章，在实际操作层面，也无法取代人自身的素质和责任心。</p>
+</blockquote>
+<p>通过海恩法则，我们要认识到事前的风险识别与管理能极大的帮助我们避免相关问题的出现。所以需要我们对于应用架构有着极为深度的了解。并从可用性的角度，去判别应用风险的可能点。</p>
+<ul>
+<li>比如当容量过载的时候，系统可能出现什么问题。</li>
+<li>机房断电，会出现什么问题</li>
+<li>域名解析异常，会导致什么问题<br>
+我们列出一份详尽的系统风险评估文档。从不同的角度列举不同风险的可能点以及事故预言。在现代云原生的发展下，我们更加可以利用混沌工程等故障去模拟相关风险的产生。</li>
+</ul>
+<h3 id="事故管理">事故管理</h3>
+<p>事故是不可避免的，其实事故不可怕，可怕的是我们没有对事故进行总结学习。只有出现了事故，我们才能对于现有体系的问题进行修复总结，避免同一个事故再发生，所以我们需要对于事故有着细致的报告和总结复盘。</p>
+<h3 id="事故报告事故复盘">事故报告&amp;事故复盘</h3>
+<h4 id="事故报告">事故报告</h4>
+<p>事故报告是我们了解事故全景的重要手段，我们需要通过事故报告了解到</p>
+<ul>
+<li>事故原因<br>
+国内的朋友可以了解一下事故致因2-4模型</li>
+<li>事故背景</li>
+<li>事故半径</li>
+<li>事故时间线</li>
+<li>事故干系人</li>
+<li>事故处理过程</li>
+</ul>
+<p>有了以上的信息，我们才可以详细的知道一个事故的全部面貌，最好我们有一个统一的知识库去存档这些，帮助以后我们了解相关的改进背景以及处理方案有着极好的作用。</p>
+<h4 id="事故复盘">事故复盘</h4>
+<p>研究故障或者失败的逻辑非常重要，复制成功者所做所为，不一定回让你成功，而避免失败者的做事套路，将一定会增加你的成功概率。</p>
+<h5 id="底层逻辑">底层逻辑</h5>
+<ul>
+<li>故障是常态，无法完全避免</li>
+<li>故障时表象，背后的技术和管理上的问题才是根因</li>
+<li>可以包容失败，但是不允许犯错</li>
+<li>个体的失误反而是一件好事</li>
+</ul>
+<p>良好的事故复盘能够有效的帮助团队，回顾整个事故的点线面，这样学习式的复盘，能更好的给每个人以比较深刻的印象，最好的是学习之后，能够整理出相关合理的流程帮助未来的事故不在发生以及推动相关工具建设，告警设置以及故障经验。</p>
+<h2 id="项目研发工作">项目研发工作</h2>
+<p>SRE还有重要的工作是相关系统的研发，因为很多重要平台都是通过sre孵化出来的，例如可观测系统、海量分布式作业平台，CMDB系统等。因为这些平台的使用才能更好的帮助整个团队提高研发效能水平。</p>
+<h3 id="架构设计">架构设计</h3>
+<p>SRE也需要有着相当不错的架构设计能力，因为sre需要评估研发团队的架构以及sre团队研发平台的架构，<br>
+而且SRE也需要从架构层面去衡量整个系统的可靠性，可观测性等能力,并给出相关的指导意见。</p>
+<h3 id="软件工程">软件工程</h3>
+<p>软件工程更是SRE需要深入了解到，因为我们需要参与到研发流程的建设，不管是瀑布式的研发模式，还是现在DEVOPS敏捷迭代的开发模式，我们都应该完整的了解软件工程。</p>
+<h3 id="项目管理">项目管理</h3>
+<p>从我的经历来看，一般sre团队内部没有专职的项目管理的成员，所以一般需要某一个成员兼职项目管理的角色，这名成员一般要根据项目周期、时间风险、人力投入、技术分析、周边团队协作方面去规范项目进度。一般需要需要经验丰富的人担任。</p>
+<h3 id="测试流程">测试流程</h3>
+<p>sre自身的软件交付质量，也需要有相关的测试流程去把握，但是对于sre团队来说，最好是做到核心路径的单元测试覆盖，这样在重构或者功能迁移的时候，能快速回归测试迭代，最后通过完整的集成测试帮助上线前的交付验证，避免出现问题。</p>
+<h3 id="研发流水线">研发流水线</h3>
+<p>因为sre团队一般成员较少，所以自身的研发devops流水线一定要建设得比较好，才能高效的产出交付功能，不然就会陷入研发怪圈。<br>
+所以产生了蓝鲸saas开发这种帮助快速开发的平台产品。</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E4%B8%BB%E4%BD%93">主体</a>
+<ul>
+<li><a href="#%E5%88%B6%E5%AE%9Aslis-slos-slas">制定SLIs、SLOs、SLAs</a>
+<ul>
+<li><a href="#%E6%A6%82%E5%BF%B5">概念</a></li>
+<li><a href="#%E4%B8%89%E8%80%85%E7%9A%84%E5%85%B3%E7%B3%BB">三者的关系</a></li>
+<li><a href="#%E5%B9%B2%E7%B3%BB%E4%BA%BA">干系人</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8F%AF%E9%9D%A0%E6%80%A7-%E6%80%A7%E8%83%BD%E5%92%8C%E5%BC%B9%E6%80%A7-%E9%A5%B1%E5%92%8C%E5%BA%A6-%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7">可靠性、性能和弹性、饱和度、可观测性</a>
+<ul>
+<li><a href="#%E5%8F%AF%E9%9D%A0%E6%80%A7">可靠性</a>
+<ul>
+<li><a href="#%E6%9C%8D%E5%8A%A1%E6%97%B6%E9%97%B4">服务时间</a></li>
+<li><a href="#mttr">MTTR</a></li>
+<li><a href="#mtbf">MTBF</a></li>
+<li><a href="#mttf">MTTF</a></li>
+</ul>
+</li>
+<li><a href="#%E6%80%A7%E8%83%BD%E5%92%8C%E5%BC%B9%E6%80%A7">性能和弹性</a></li>
+<li><a href="#%E9%A5%B1%E5%92%8C%E5%BA%A6">饱和度</a></li>
+<li><a href="#%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7">可观测性</a>
+<ul>
+<li><a href="#%E6%8C%87%E6%A0%87">指标</a></li>
+<li><a href="#%E6%8C%87%E6%A0%87%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8Bopenmetric">指标数据模型(OpenMetric)</a></li>
+<li><a href="#%E6%8C%87%E6%A0%87%E7%B1%BB%E5%9E%8B">指标类型</a></li>
+<li><a href="#%E8%B7%9F%E8%B8%AAtrace">跟踪（Trace)</a></li>
+<li><a href="#%E6%97%A5%E5%BF%97log">日志（Log)</a></li>
+<li><a href="#profile">Profile</a></li>
+<li><a href="#crash">Crash</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E9%94%99%E8%AF%AF%E9%A2%84%E7%AE%97">错误预算</a></li>
+<li><a href="#%E4%BA%8B%E5%8A%A1%E5%B7%A5%E4%BD%9C%E9%A2%84%E7%AE%97">事务工作预算</a></li>
+<li><a href="#%E9%A3%8E%E9%99%A9%E8%AF%86%E5%88%AB%E5%92%8C%E7%AE%A1%E7%90%86">风险识别和管理</a></li>
+<li><a href="#%E4%BA%8B%E6%95%85%E7%AE%A1%E7%90%86">事故管理</a></li>
+<li><a href="#%E4%BA%8B%E6%95%85%E6%8A%A5%E5%91%8A%E4%BA%8B%E6%95%85%E5%A4%8D%E7%9B%98">事故报告&amp;事故复盘</a>
+<ul>
+<li><a href="#%E4%BA%8B%E6%95%85%E6%8A%A5%E5%91%8A">事故报告</a></li>
+<li><a href="#%E4%BA%8B%E6%95%85%E5%A4%8D%E7%9B%98">事故复盘</a>
+<ul>
+<li><a href="#%E5%BA%95%E5%B1%82%E9%80%BB%E8%BE%91">底层逻辑</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E9%A1%B9%E7%9B%AE%E7%A0%94%E5%8F%91%E5%B7%A5%E4%BD%9C">项目研发工作</a>
+<ul>
+<li><a href="#%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1">架构设计</a></li>
+<li><a href="#%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B">软件工程</a></li>
+<li><a href="#%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86">项目管理</a></li>
+<li><a href="#%E6%B5%8B%E8%AF%95%E6%B5%81%E7%A8%8B">测试流程</a></li>
+<li><a href="#%E7%A0%94%E5%8F%91%E6%B5%81%E6%B0%B4%E7%BA%BF">研发流水线</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://blog.zhuxingzhao.com/post/ji-zhu-yun-ying-de-chu-ru-zhi-nan/">
+              <h3 class="post-title">
+                技术运营的初入指南
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '7b0cb864ab56a8a46e72',
+    clientSecret: '5f32a3e758210c58d489ad60b1f159d1c8bf5783',
+    repo: 'zzhutianyu.github.io',
+    owner: 'zzhutianyu',
+    admin: ['zzhutianyu'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+</br>
+Copyright ©　诸天域 | 
+  <a class="rss" href="https://blog.zhuxingzhao.com/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+
+  let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+  // This should probably be throttled.
+  // Especially because it triggers during smooth scrolling.
+  // https://lodash.com/docs/4.17.10#throttle
+  // You could do like...
+  // window.addEventListener("scroll", () => {
+  //    _.throttle(doThatStuff, 100);
+  // });
+  // Only not doing it here to keep this Pen dependency-free.
+
+  window.addEventListener("scroll", event => {
+    let fromTop = window.scrollY;
+
+    mainNavLinks.forEach((link, index) => {
+      let section = document.getElementById(decodeURI(link.hash).substring(1));
+      let nextSection = null
+      if (mainNavLinks[index + 1]) {
+        nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+      }
+      if (section.offsetTop <= fromTop) {
+        if (nextSection) {
+          if (nextSection.offsetTop > fromTop) {
+            link.classList.add("current");
+          } else {
+            link.classList.remove("current");    
+          }
+        } else {
+          link.classList.add("current");
+        }
+      } else {
+        link.classList.remove("current");
+      }
+    });
+  });
+
+</script>
+
+      </div>
+    </div>
+  </body>
+</html>
