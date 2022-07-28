@@ -1,0 +1,449 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>基于Opentelemetry标准化的产品应用 | 诸天域</title>
+<meta name="description" content="温故而知新" />
+<link rel="shortcut icon" href="https://blog.zhuxingzhao.com/favicon.ico?v=1659010964363">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://blog.zhuxingzhao.com/styles/main.css">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-155197719-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-155197719-1');
+</script>
+
+
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://blog.zhuxingzhao.com">
+  <img class="avatar" src="https://blog.zhuxingzhao.com/images/avatar.png?v=1659010964363" alt="">
+  </a>
+  <h1 class="site-title">
+    诸天域
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+        <a href="https://github.com/zzhutianyu" target="_blank">
+          <i class="fab fa-github"></i>
+        </a>
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              基于Opentelemetry标准化的产品应用
+            </h2>
+            <div class="post-info">
+              <span>
+                2022-07-28
+              </span>
+              <span>
+                8 min read
+              </span>
+              
+                <a href="https://blog.zhuxingzhao.com/tag/i9cDl5rWS/" class="post-tag">
+                  # Opentelemetry
+                </a>
+              
+                <a href="https://blog.zhuxingzhao.com/tag/jnOwfvABGC/" class="post-tag">
+                  # 可观测性
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h1 id="基于opentelemetry标准化的产品应用">基于Opentelemetry标准化的产品应用</h1>
+<p>otel项目作为旨在解决可观测数据采集的最终标准化解决方案，数据的字段定义约定也是其落地的目标，这关系到后端观测系统的产品能力的衍生和发展。也是未来规范在不同的场景有着一致性的约束，对比与数据协议本身也是有着非常重要的作用。</p>
+<h2 id="otel语义标准化的字段定义">otel语义标准化的字段定义</h2>
+<blockquote>
+<p><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/main/semantic_conventions/README.md">semantic_conventions</a><br>
+<a href="https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/resource/README.md">Resource</a><br>
+<a href="https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/trace/semantic_conventions/README.md">Trace</a><br>
+<a href="https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/semantic_conventions/README.md">Metric</a></p>
+</blockquote>
+<p>上述三个链接是目前otel协议已经落地的相关标准化字段和标准化定义的相关规范，也就是说所有的otel相关的落地使用我们都应该遵守这个规范。这些标准化的字段规范有哪些内容。</p>
+<ul>
+<li>定义了不同场景下的该怎么命名字段。</li>
+<li>定义了不同场景下我们应该怎么去设置我们的span或者metric的内容。<br>
+我们从三个场景的例子来看看这些定义都有什么</li>
+</ul>
+<h3 id="resource">Resource</h3>
+<p>Resouce在otel里面是一个全局的通用标签，也就是说，这个内容一般对于一个服务来说都是一致的。生意在Resource里面我们一般定义了以下的标准化字段</p>
+<ul>
+<li>服务的字段定义<br>
+这个定义就可以帮助我们的后段系统通过一下的字段，知道服务有哪些，以及服务的租户、实例和版本等。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+<th>Examples</th>
+<th>Requirement Level</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>service.name</code></td>
+<td>string</td>
+<td>Logical name of the service. [1]</td>
+<td><code>shoppingcart</code></td>
+<td>Required</td>
+</tr>
+<tr>
+<td><code>service.namespace</code></td>
+<td>string</td>
+<td>A namespace for <code>service.name</code>. [2]</td>
+<td><code>Shop</code></td>
+<td>Recommended</td>
+</tr>
+<tr>
+<td><code>service.instance.id</code></td>
+<td>string</td>
+<td>The string ID of the service instance. [3]</td>
+<td><code>627cc493-f310-47de-96bd-71410b7dec09</code></td>
+<td>Recommended</td>
+</tr>
+<tr>
+<td><code>service.version</code></td>
+<td>string</td>
+<td>The version string of the service API or implementation.</td>
+<td><code>2.0.0</code></td>
+<td>Recommended</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>SDK的字段定义
+<ul>
+<li>例如<code>telemetry.sdk.name</code>就可以表示访问所使用的sdk的名字，因为我们服务所使用的sdk不一定的otel官方的sdk也可以是用户自研或者jager等开源sdk，这样我们就可以较好的了解sdk的使用情况。</li>
+</ul>
+</li>
+<li>环境的字段定义
+<ul>
+<li>操作系统</li>
+<li>社保</li>
+<li>云厂商</li>
+<li>部署方式</li>
+<li>浏览器</li>
+</ul>
+</li>
+</ul>
+<h3 id="trace">Trace</h3>
+<p>trace的规范一般是在使用traceSDK的使用需要记录一些我们相关埋点的一些信息。<br>
+比如我们要记录ip的时候要怎么命名呢？是ip,inner_ip,ipv4,ipv6呢？<br>
+如果是发生调用的时候怎么区别是本机的ip还是对端的ip呢。</p>
+<p>这个规范定义就帮我们做到了这些。</p>
+<p>Trace的标准规范就建议我们网络相关的使用<code>net.*.name</code>的命名方式，并且已经将常用的定义以及规范了下来。<br>
+比如ip的定义就是<code>net.host.ip</code>OR<code>net.peer.ip</code>分别表示本机的ip和对端的ip，我们也看到了我们使用<code>net.host.*</code>来表示本机的网络信息定义，<code>net.peer.*</code>来表示对方的网络信息定义，这样也就方便我们在数据分析的时候做到相关的关联分析。</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Type</th>
+<th>Description</th>
+<th>Examples</th>
+<th>Requirement Level</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>net.transport</code></td>
+<td>string</td>
+<td>Transport protocol used. See note below.</td>
+<td><code>ip_tcp</code></td>
+<td>Recommended</td>
+</tr>
+<tr>
+<td><code>net.app.protocol.name</code></td>
+<td>string</td>
+<td>Application layer protocol used. The value SHOULD be normalized to lowercase.</td>
+<td><code>amqp</code>; <code>http</code>; <code>mqtt</code></td>
+<td>Recommended</td>
+</tr>
+<tr>
+<td><code>net.app.protocol.version</code></td>
+<td>string</td>
+<td>Version of the application layer protocol used. See note below. [1]</td>
+<td><code>3.1.1</code></td>
+<td>Recommended</td>
+</tr>
+<tr>
+<td><code>net.peer.ip</code></td>
+<td>string</td>
+<td>Remote address of the peer (dotted decimal for IPv4 or <a href="https://tools.ietf.org/html/rfc5952">RFC5952</a> for IPv6)</td>
+<td><code>127.0.0.1</code></td>
+<td>Recommended</td>
+</tr>
+<tr>
+<td><code>net.peer.port</code></td>
+<td>int</td>
+<td>Remote port number.</td>
+<td><code>80</code>; <code>8080</code>; <code>443</code></td>
+<td>Recommended</td>
+</tr>
+<tr>
+<td><code>net.peer.name</code></td>
+<td>string</td>
+<td>Remote hostname or similar, see note below. [2]</td>
+<td><code>example.com</code></td>
+<td>Recommended</td>
+</tr>
+<tr>
+<td><code>net.host.ip</code></td>
+<td>string</td>
+<td>Like <code>net.peer.ip</code> but for the host IP. Useful in case of a multi-IP host.</td>
+<td><code>192.168.0.1</code></td>
+<td>Recommended</td>
+</tr>
+<tr>
+<td><code>net.host.port</code></td>
+<td>int</td>
+<td>Like <code>net.peer.port</code> but for the host port.</td>
+<td><code>35555</code></td>
+<td>Recommended</td>
+</tr>
+<tr>
+<td><code>net.host.name</code></td>
+<td>string</td>
+<td>Local hostname or similar, see note below.</td>
+<td><code>localhost</code></td>
+<td>Recommended</td>
+</tr>
+</tbody>
+</table>
+<p>我们以网络相关的规范字段定义来了解了Trace相关的定义其他的可以自行前往对应的文档地址查看。</p>
+<h3 id="metric">Metric</h3>
+<blockquote>
+<p><a href="https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/metrics/semantic_conventions/README.md">Metric</a><br>
+Metric跟前两者不同的是，这里不仅有字段规范的定义，也有着指标名称的命名以及单位的规范建议。</p>
+</blockquote>
+<h4 id="命名规范">命名规范</h4>
+<ul>
+<li>limit 上限/总量<br>
+用来表示恒定，已知的指标对象应该叫做<code>entity.limit</code>, 例如<code>system.memory.limit</code>表示系统的内存总量</li>
+<li>usage 使用量<br>
+用来表示恒定的目标对象的使用量的指标对象应该叫做<code>entity.usage</code>, 例如<code>system.memory.usage</code>表示系统内存使用量</li>
+<li>utilization 利用率<br>
+个测量超出其限制的使用量的指标对象应该被叫做<code>entity.utilization</code>,例如<code>system.memory.utilisation</code>表示正在使用的内存部分. <code>utilization</code>应该在[0, 1]</li>
+<li>time<br>
+用来表示时间流逝的指标对象应该叫做<code>entity.time</code>m, 例如<code>system.cpu.time</code> 表示cpu的占用时间</li>
+<li>io<br>
+测量双向流动的指标对象应该叫做<code>enitry.io</code>, 例如<code>system.network.io</code></li>
+<li>other<br>
+如果不符合上述描述的目标，可以比较自由的命名例如<code>network.packets</code></li>
+</ul>
+<h2 id="产品形态应用">产品形态应用</h2>
+<p>我们如何在相关的观测产品上利用这些标准化的约定呢。众所周知，我们有了标准的数据，就可以尽可能的互相关联，减少我们在解决问题的时候排查时间，甚至在建设监控大盘的时候，可以比较容易的通告标准化的定义，快速建设相关仪表。</p>
+<h3 id="主机实例的产品关联">主机实例的产品关联</h3>
+<blockquote>
+<p>前置条件：主机性能数据 CMDB基础架构数据 网络性能数据</p>
+</blockquote>
+<p>我们已知在数据中含有相关的<code>ip</code>字段内容，我们即可以通过<code>ip</code>与主机性能数据进行关联。如果<code>CMDB</code>系统比较强大的话。我们甚至可以直接展示主机到目标机器的直接的网络拓扑情况，能很快的排查底层的网络状态。</p>
+<ul>
+<li>快速查看目标主机性能和调用方主机性能</li>
+<li>查看主机之间的网络联通状态</li>
+</ul>
+<h3 id="容器实例级别的">容器实例级别的</h3>
+<blockquote>
+<p>前置条件：容器监控数据 容器基础数据</p>
+</blockquote>
+<p>我们可以知道标准字段已经存在了容器习惯的字段，但是需要我们的SDK去在应用部署到<code>docker</code>或者<code>k8s</code>上面的时候去获取到容器基础数据。这样我们就能在仪表中快速关联到相关容器性能</p>
+<ul>
+<li>快速查看相关联容器性能，k8s集群状态</li>
+</ul>
+<h3 id="db级别">DB级别</h3>
+<p>标准字段的<code>DB</code>字段，可以让我们识别出对应的数据库实例，这样可以直接查看数据库性能数据，而且可以进行<code>sql</code>的深度分析，来进行我们更加业务程度的性能分析。</p>
+<ul>
+<li>数据库性能数据查看</li>
+<li><code>sql</code>分析</li>
+</ul>
+<h3 id="指标标准">指标标准</h3>
+<p>我们可以标准的指标命名做什么，一旦指标在某个场景固定下来了指标的命名方式，我们即可以认为这个数据的已经固定了下来，我们可以正对一类的指标<code>limit</code>去固定相关的仪表使用方式，告警策略，更固定的命名可以直接固定仪表以及告警策略，对于用户来说，减少了使用成本，开箱即用。不用理解特定场景的下的指标命名。</p>
+<ul>
+<li>固定仪表盘</li>
+<li>固定告警策略</li>
+</ul>
+<p>以上我们介绍了基于<code>otel</code>标准化的一些产品上的应用，<code>otel</code>不仅在做协议标准，<code>SDK</code>, <code>collector</code>,还有这些数据标准化也是相当重要的落地，只要这些标准化了，我们才能在产品上有更多的想象空间，不然就会在落地的实现上造成更多的割裂。希望<code>otel</code>的标准化落地越来越好，也希望在<code>SDK</code>有更多的标准化使用，以及落地实践。我们该怎样基于标准化去使用<code>SDK</code>,也希望更多的观测产品的设计者和开发者深度了解标准才能更好的设计出更好使用的可观测统一的产品。</p>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E5%9F%BA%E4%BA%8Eopentelemetry%E6%A0%87%E5%87%86%E5%8C%96%E7%9A%84%E4%BA%A7%E5%93%81%E5%BA%94%E7%94%A8">基于Opentelemetry标准化的产品应用</a>
+<ul>
+<li><a href="#otel%E8%AF%AD%E4%B9%89%E6%A0%87%E5%87%86%E5%8C%96%E7%9A%84%E5%AD%97%E6%AE%B5%E5%AE%9A%E4%B9%89">otel语义标准化的字段定义</a>
+<ul>
+<li><a href="#resource">Resource</a></li>
+<li><a href="#trace">Trace</a></li>
+<li><a href="#metric">Metric</a>
+<ul>
+<li><a href="#%E5%91%BD%E5%90%8D%E8%A7%84%E8%8C%83">命名规范</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E4%BA%A7%E5%93%81%E5%BD%A2%E6%80%81%E5%BA%94%E7%94%A8">产品形态应用</a>
+<ul>
+<li><a href="#%E4%B8%BB%E6%9C%BA%E5%AE%9E%E4%BE%8B%E7%9A%84%E4%BA%A7%E5%93%81%E5%85%B3%E8%81%94">主机实例的产品关联</a></li>
+<li><a href="#%E5%AE%B9%E5%99%A8%E5%AE%9E%E4%BE%8B%E7%BA%A7%E5%88%AB%E7%9A%84">容器实例级别的</a></li>
+<li><a href="#db%E7%BA%A7%E5%88%AB">DB级别</a></li>
+<li><a href="#%E6%8C%87%E6%A0%87%E6%A0%87%E5%87%86">指标标准</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://blog.zhuxingzhao.com/post/sre-de-zhu-yao-gong-zuo/">
+              <h3 class="post-title">
+                 SRE的主要工作
+              </h3>
+            </a>
+          </div>
+        
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '7b0cb864ab56a8a46e72',
+    clientSecret: '5f32a3e758210c58d489ad60b1f159d1c8bf5783',
+    repo: 'zzhutianyu.github.io',
+    owner: 'zzhutianyu',
+    admin: ['zzhutianyu'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+</br>
+Copyright ©　诸天域 | 
+  <a class="rss" href="https://blog.zhuxingzhao.com/atom.xml" target="_blank">RSS</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+
+  let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+  // This should probably be throttled.
+  // Especially because it triggers during smooth scrolling.
+  // https://lodash.com/docs/4.17.10#throttle
+  // You could do like...
+  // window.addEventListener("scroll", () => {
+  //    _.throttle(doThatStuff, 100);
+  // });
+  // Only not doing it here to keep this Pen dependency-free.
+
+  window.addEventListener("scroll", event => {
+    let fromTop = window.scrollY;
+
+    mainNavLinks.forEach((link, index) => {
+      let section = document.getElementById(decodeURI(link.hash).substring(1));
+      let nextSection = null
+      if (mainNavLinks[index + 1]) {
+        nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+      }
+      if (section.offsetTop <= fromTop) {
+        if (nextSection) {
+          if (nextSection.offsetTop > fromTop) {
+            link.classList.add("current");
+          } else {
+            link.classList.remove("current");    
+          }
+        } else {
+          link.classList.add("current");
+        }
+      } else {
+        link.classList.remove("current");
+      }
+    });
+  });
+
+</script>
+
+      </div>
+    </div>
+  </body>
+</html>
